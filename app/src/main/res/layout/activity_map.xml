@@ -22,11 +22,11 @@
         android:src="@drawable/icon_location"
         app:borderWidth="0dp"
         app:tint="@color/orange"
-        app:layout_constraintBottom_toTopOf="@+id/btn_check_hear"
+        app:layout_constraintBottom_toTopOf="@+id/btn_check_here"
         app:layout_constraintEnd_toEndOf="parent"/>
 
     <LinearLayout
-        android:id="@+id/btn_check_hear"
+        android:id="@+id/btn_check_here"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginStart="20dp"

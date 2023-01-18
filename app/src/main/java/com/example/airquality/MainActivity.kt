@@ -11,6 +11,8 @@ import android.location.LocationManager
 import android.os.Bundle
 import android.provider.Settings
 import android.widget.Toast
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
@@ -54,6 +56,19 @@ class MainActivity : AppCompatActivity() {
     //위도와 경도를 가져올 때 필요함
     lateinit var locationProvider: LocationProvider
 
+    // 결과를 받아와야 하는 액티비티를 실행할 때 사용
+    val startMapActivityResult =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult(),
+        object : ActivityResultCallback<ActivityResult> {
+            override fun onActivityResult(result: ActivityResult?) {
+                if ((result?.resultCode ?: 0) == Activity.RESULT_OK) {
+                    latitude = result?.data?.getDoubleExtra("latitude", 0.0) ?: 0.0
+                    longitude = result?.data?.getDoubleExtra("longitude", 0.0) ?: 0.0
+                    updateUI()
+                }
+            }
+        })
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -62,6 +77,8 @@ class MainActivity : AppCompatActivity() {
         checkAllPermissions() //권한 확인
         updateUI()
         setRefreshButton()
+
+        setFab()
     }
 
     private fun updateUI() {
@@ -69,7 +86,7 @@ class MainActivity : AppCompatActivity() {
 
         //위도와 경도 정보를 가져옴
         if (latitude == 0.0 || longitude == 0.0) {
-            latitude = locationProvider.getLocationLatitiude()
+            latitude = locationProvider.getLocationLatitude()
             longitude = locationProvider.getLocationLongitude()
         }
 
@@ -315,6 +332,16 @@ class MainActivity : AppCompatActivity() {
     private fun setRefreshButton() {
         binding.btnRefresh.setOnClickListener {
             updateUI()
+        }
+    }
+
+    // startMapActivityResult 변수를 실행하면 지도 페이지로 이동하고, 등록해둔 onActivityResult 콜백에 보낸 값이 전달
+    private fun setFab() {
+        binding.fab.setOnClickListener {
+            val intent = Intent(this, MapActivity::class.java)
+            intent.putExtra("currentLat", latitude)
+            intent.putExtra("currentLng", longitude)
+            startMapActivityResult.launch(intent)
         }
     }
 }
