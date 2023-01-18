@@ -33,6 +33,10 @@ import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
+    // 위도, 경도
+    var latitude: Double = 0.0
+    var longitude: Double = 0.0
+
     lateinit var binding: ActivityMainBinding
 
     //런타임 권한 요청 시 필요한 요청 코드
@@ -64,8 +68,10 @@ class MainActivity : AppCompatActivity() {
         locationProvider = LocationProvider(this@MainActivity)
 
         //위도와 경도 정보를 가져옴
-        val latitude: Double = locationProvider.getLocationLatitiude()
-        val longitude: Double = locationProvider.getLocationLongitude()
+        if (latitude == 0.0 || longitude == 0.0) {
+            latitude = locationProvider.getLocationLatitiude()
+            longitude = locationProvider.getLocationLongitude()
+        }
 
         if (latitude != 0.0 || longitude != 0.0) {
             //1. 현재 위치를 가져오고 UI 업데이트
