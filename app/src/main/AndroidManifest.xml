@@ -22,6 +22,11 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyB-8nUsVaiZlNb6CWktXkFDKw1kX5oM6CI" />
+
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-6140257895494497~8250513198" />
+
         <activity
             android:name=".MapActivity"
             android:exported="true" />
